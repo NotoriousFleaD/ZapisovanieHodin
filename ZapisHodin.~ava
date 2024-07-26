@@ -6,7 +6,8 @@ import java.util.ArrayList;
 
 public class ZapisHodin{
   private String datum;
-  private ArrayList hra, casStravenyHry;
+  private ArrayList hra; 
+  private ArrayList<LocalTime> casStravenyHry;
   private LocalTime zaciatokCasu2, koniecCasu2, stravenyCas;
   
   public ZapisHodin(){
@@ -57,7 +58,7 @@ public class ZapisHodin{
     
   }
   
-  public ZapisHodin(String datum, LocalTime zaciatokCasu, LocalTime koniecCasu, ArrayList hra, ArrayList casStravenyHry){
+  public ZapisHodin(String datum, LocalTime zaciatokCasu, LocalTime koniecCasu, ArrayList<String> hra, ArrayList<LocalTime> casStravenyHry){
     this.datum = datum;
     this.zaciatokCasu2 = zaciatokCasu;
     this.koniecCasu2 = koniecCasu;
@@ -71,7 +72,7 @@ public class ZapisHodin{
 //    this.datum = datum;
 //    this.zaciatokCasu2 = zaciatokCasu;
 //    this.koniecCasu2 = koniecCasu;
-//    this.hra = hra;
+//    this.hry = hra;
 //    
 //    stravenyCas = vypocetStravenehoCasu(zaciatokCasu2, koniecCasu2);
 //  }
