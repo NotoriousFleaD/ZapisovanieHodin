@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class ZapisHodin{
   private String datum;
-  private ArrayList hra/*, casStravenyHry*/; 
+  private ArrayList hra, casStravenyHry; 
   private LocalTime zaciatokCasu2, koniecCasu2, stravenyCas;
   
   public ZapisHodin(){
