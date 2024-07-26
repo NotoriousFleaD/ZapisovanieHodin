@@ -1,0 +1,10 @@
+kalendar - vybrat datum / zelene - cervene policko
+cas - od kedy do kedy
+na akej hre a ako dlho, pridat moznost na viacej hier - dynamicke polia
+
+udaje zapisat do .txt suboru
+
+
+PREROBIT>>>>>
+
+konstruktor - z konstruktora vybrat nepotrebne veci, dodatocne pridat dalsie metody
