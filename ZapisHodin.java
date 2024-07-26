@@ -54,7 +54,7 @@ public class ZapisHodin{
     
     System.out.print("Zadaj nazov hry: ");
     hra.add(sc.nextLine());
-    
+     
   }
   
   public ZapisHodin(String datum, LocalTime zaciatokCasu, LocalTime koniecCasu, ArrayList hra, ArrayList casStravenyHry){
