@@ -6,14 +6,16 @@ import java.util.ArrayList;
 
 public class ZapisHodin{
   private String datum;
-  private ArrayList hra, casStravenyHry; 
+  private ArrayList hra, casStravenyHry;
   private LocalTime zaciatokCasu2, koniecCasu2, stravenyCas;
   private String[][] hry_a_cas;
   
   public ZapisHodin(){
     Scanner sc = new Scanner(System.in);
     hra = new ArrayList<String>();
-    
+    casStravenyHry = new ArrayList<LocalTime>();
+    int i = 0;
+        
     datum = zistenieDatumu();
     
     String zaciatokCasu = "";
@@ -49,49 +51,44 @@ public class ZapisHodin{
     koniecCasu2 = LocalTime.parse(koniecCasu);
     
     stravenyCas = vypocetStravenehoCasu(zaciatokCasu2, koniecCasu2);
-    
     LocalTime zostavajuciCas = stravenyCas;
+    LocalTime premennaCas = LocalTime.now();
     
-    System.out.print("Zadaj nazov hry: ");
-    hra.add(sc.nextLine());
-    
-    System.out.print("Zadaj kolko casu si odohral v " + hra.get(0) + ": ");
-    String casHra = sc.nextLine();
-    
-    LocalTime premennaCas = premenaNaLocalTime(zostavajuciCas, casHra);
-    
-    hry_a_cas = new String[1][2];
-    //tu som skoncil, debata nema reci 
-    hry_a_cas[0][0] = "" + hra.get(0);
-    hry_a_cas[0][1] = "" + String.valueOf(premennaCas);
-    
-    //    zostavajuciCas = zostavajuciCas.of(zostavajuciCas.getHour() - premennaCas.getHour(), zostavajuciCas.getMinute() - premennaCas.getMinute());
-    zostavajuciCas = zostavajuciCas.minusHours(premennaCas.getHour());
-    zostavajuciCas = zostavajuciCas.minusMinutes(premennaCas.getMinute());
-    
-    //    switch(hra.size()){
-    //      case 1:
-    //        hry_a_cas = new String[1][2];
-    //        
-    //        hry_a_cas[0][0] = "" + hra.get(0);
-    //        hry_a_cas[0][0] = String.valueOf(stravenyCas);
-    //        break;
-    //        
-    //      default:
-    //        do{
-    //          hry_a_cas = new String[hra.size()][2];
-    //          
-    //          // Inicializacia hier do pola
-    //          for(int i = 0; i < hra.size(); i++){
-    //            hry_a_cas[i][0] = "" + hra.get(i);  //<<< nechaapem
-    //          }
-    //          
-    //        
-    //        }while(zostavajuciCas.getHour() != 0 && zostavajuciCas.getMinute() != 0);
-    //    }
-    
-    
-    
+    do{
+      System.out.print("Zadaj nazov hry: ");
+      hra.add(sc.nextLine());
+      
+      System.out.println("\nZostavajuci cas: " + zostavajuciCas.getHour() + "h " + zostavajuciCas.getMinute() + "min");
+      System.out.print("Zadaj kolko casu si odohral v " + hra.get(i) + ": ");
+      String casHra = sc.nextLine();
+      
+      casStravenyHry.add(premenaNaLocalTime(zostavajuciCas, casHra));
+      
+      switch(hra.size()){
+        case 1:
+          hry_a_cas = new String[hra.size()][2];
+
+          hry_a_cas[0][0] = "" + hra.get(0);
+          hry_a_cas[0][1] = String.valueOf(casStravenyHry.get(0));
+          break;
+          
+        default:
+          hry_a_cas = new String[hra.size()][2];
+          
+          // Inicializacia hier a casu do pola
+          for(int j = 0; j < hra.size(); j++){
+            hry_a_cas[j][0] = "" + hra.get(j);
+            hry_a_cas[j][1] = "" + String.valueOf(casStravenyHry.get(j));
+          }
+          
+      }
+      
+      premennaCas = premennaCas.parse(hry_a_cas[i][1]);
+      //    zostavajuciCas = zostavajuciCas.of(zostavajuciCas.getHour() - premennaCas.getHour(), zostavajuciCas.getMinute() - premennaCas.getMinute());
+      zostavajuciCas = zostavajuciCas.minusHours(premennaCas.getHour());
+      zostavajuciCas = zostavajuciCas.minusMinutes(premennaCas.getMinute());
+      i++;
+    }while(zostavajuciCas.getHour() != 0 && zostavajuciCas.getMinute() != 0);
     
     
   }
@@ -218,13 +215,7 @@ public class ZapisHodin{
  
       pole1[1] = pole2[i];
     }
-
-    int c = Integer.parseInt(String.valueOf(pole1));
-    cas = cas.minusHours(c);
-    
-    
-    System.out.println("pred>" + cas.getMinute());
-    
+    int hodiny = Integer.parseInt(String.valueOf(pole1));
     
     i+=2; // aby sa prekocila medzera
     pole1 = vynulovaniePola(pole1, 2);
@@ -234,13 +225,10 @@ public class ZapisHodin{
       pole1[1] = pole1[0];
  
       pole1[1] = pole2[j];
-      System.out.println(pole1);
     }
-    cas = cas.minusMinutes(Integer.valueOf(String.valueOf(pole1)));
-    System.out.println("po>" + cas.getMinute());
+    int minuty = Integer.parseInt(String.valueOf(pole1));
 
-    System.out.println("KONIEC");
-    return cas;
+    return cas.of(hodiny, minuty);
   }
 
   public char[] vynulovaniePola(char[] pole, int velkost){
