@@ -88,8 +88,6 @@ public class ZapisHodin{
           
       }
       
-      
- 
       //    zostavajuciCas = zostavajuciCas.of(zostavajuciCas.getHour() - premennaCas.getHour(), zostavajuciCas.getMinute() - premennaCas.getMinute());
       zostavajuciCas = zostavajuciCas.minusHours(premennaCas.getHour());
       zostavajuciCas = zostavajuciCas.minusMinutes(premennaCas.getMinute());
@@ -108,16 +106,29 @@ public class ZapisHodin{
     this.casStravenyHry = new ArrayList<LocalTime>(casStravenyHry);
     
     stravenyCas = vypocetStravenehoCasu(zaciatokCasu2, koniecCasu2);
+    
+    hry_a_cas = new String[hra.size()][2];
+          
+    for(int j = 0; j < hra.size(); j++){
+      hry_a_cas[j][0] = "" + hra.get(j);
+      hry_a_cas[j][1] = "" + String.valueOf(casStravenyHry.get(j));
+    }
   }
   
-//  public ZapisHodin(String datum, LocalTime zaciatokCasu, LocalTime koniecCasu, String hra){
-//    this.datum = datum;
-//    this.zaciatokCasu2 = zaciatokCasu;
-//    this.koniecCasu2 = koniecCasu;
-//    this.hry = hra;
-//    
-//    stravenyCas = vypocetStravenehoCasu(zaciatokCasu2, koniecCasu2);
-//  }
+  public ZapisHodin(String datum, LocalTime zaciatokCasu, LocalTime koniecCasu, String hra){
+    this.datum = datum;
+    this.zaciatokCasu2 = zaciatokCasu;
+    this.koniecCasu2 = koniecCasu;
+    this.hra = new ArrayList<String>();
+    this.hra.add(hra);
+    
+    stravenyCas = vypocetStravenehoCasu(zaciatokCasu2, koniecCasu2);
+    
+    hry_a_cas = new String[1][2];
+
+    hry_a_cas[0][0] = "" + this.hra.get(0);
+    hry_a_cas[0][1] = String.valueOf(stravenyCas);
+  }
   
   public String opravaCasu(String cas){
     return "0" + cas;
