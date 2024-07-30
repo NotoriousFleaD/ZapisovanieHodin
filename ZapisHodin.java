@@ -63,13 +63,18 @@ public class ZapisHodin{
       String casHra = sc.nextLine();
       
       casStravenyHry.add(premenaNaLocalTime(zostavajuciCas, casHra));
+      premennaCas = premennaCas.parse(String.valueOf(casStravenyHry.get(i)));
+      
+      if(zostavajuciCas.getMinute() <= premennaCas.getMinute()){
+        if(zostavajuciCas.getHour() <= premennaCas.getHour()) premennaCas = premennaCas.of(zostavajuciCas.getHour(), zostavajuciCas.getMinute()); //Ak bude zadana vacsia hodnota ako zostavajuci cas, vrati hodnotu zostavajuceho casu
+      }
       
       switch(hra.size()){
         case 1:
           hry_a_cas = new String[1][2];
 
           hry_a_cas[0][0] = "" + hra.get(0);
-          hry_a_cas[0][1] = String.valueOf(casStravenyHry.get(0));
+          hry_a_cas[0][1] = String.valueOf(premennaCas);
           break;
           
         default:
@@ -78,16 +83,12 @@ public class ZapisHodin{
           // Inicializacia hier a casu do pola
           for(int j = 0; j < hra.size(); j++){
             hry_a_cas[j][0] = "" + hra.get(j);
-            hry_a_cas[j][1] = "" + String.valueOf(casStravenyHry.get(j));
+            hry_a_cas[j][1] = "" + String.valueOf(premennaCas);
           }
           
       }
       
-      premennaCas = premennaCas.parse(hry_a_cas[i][1]);
       
-      if(zostavajuciCas.getMinute() < premennaCas.getMinute()){
-        if(zostavajuciCas.getHour() < premennaCas.getHour()) System.out.println("Je to cele v prdeli!");
-      }
  
       //    zostavajuciCas = zostavajuciCas.of(zostavajuciCas.getHour() - premennaCas.getHour(), zostavajuciCas.getMinute() - premennaCas.getMinute());
       zostavajuciCas = zostavajuciCas.minusHours(premennaCas.getHour());
@@ -217,28 +218,33 @@ public class ZapisHodin{
   public LocalTime premenaNaLocalTime(LocalTime cas, String hodnotaCasu){
     char[] pole1 = new char[2]; 
     char[] pole2 = hodnotaCasu.toCharArray();
-    int i = 0;
+    int i = 0, hodiny = 0, minuty = 0;
     
-    pole1 = vynulovaniePola(pole1, 2);
-    for (i = 0; pole2[i] != 'h'; i++) {
-      char buffer = pole1[0];
-      pole1[0] = pole1[1];
-      pole1[1] = pole1[0];
- 
-      pole1[1] = pole2[i];
+    if(hodnotaCasu.contains("h")){
+      pole1 = vynulovaniePola(pole1, 2);
+      for (i = 0; pole2[i] != 'h'; i++) {
+        char buffer = pole1[0];
+        pole1[0] = pole1[1];
+        pole1[1] = pole1[0];
+   
+        pole1[1] = pole2[i];
+      }
+      hodiny = Integer.parseInt(String.valueOf(pole1));
+      
+      i+=2; // aby sa prekocila medzera
     }
-    int hodiny = Integer.parseInt(String.valueOf(pole1));
-    
-    i+=2; // aby sa prekocila medzera
-    pole1 = vynulovaniePola(pole1, 2);
-    for (int j = i; pole2[j] != 'm'; j++ ) {
-      char buffer = pole1[0];
-      pole1[0] = pole1[1];
-      pole1[1] = pole1[0];
- 
-      pole1[1] = pole2[j];
+
+    if(hodnotaCasu.contains("min")){
+      pole1 = vynulovaniePola(pole1, 2);
+      for (int j = i; pole2[j] != 'm'; j++ ) {
+        char buffer = pole1[0];
+        pole1[0] = pole1[1];
+        pole1[1] = pole1[0];
+   
+        pole1[1] = pole2[j];
+      }
+      minuty = Integer.parseInt(String.valueOf(pole1));
     }
-    int minuty = Integer.parseInt(String.valueOf(pole1));
 
     return cas.of(hodiny, minuty);
   }
