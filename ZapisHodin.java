@@ -66,7 +66,7 @@ public class ZapisHodin{
       
       switch(hra.size()){
         case 1:
-          hry_a_cas = new String[hra.size()][2];
+          hry_a_cas = new String[1][2];
 
           hry_a_cas[0][0] = "" + hra.get(0);
           hry_a_cas[0][1] = String.valueOf(casStravenyHry.get(0));
@@ -84,11 +84,17 @@ public class ZapisHodin{
       }
       
       premennaCas = premennaCas.parse(hry_a_cas[i][1]);
+      
+      if(zostavajuciCas.getMinute() < premennaCas.getMinute()){
+        if(zostavajuciCas.getHour() < premennaCas.getHour()) System.out.println("Je to cele v prdeli!");
+      }
+ 
       //    zostavajuciCas = zostavajuciCas.of(zostavajuciCas.getHour() - premennaCas.getHour(), zostavajuciCas.getMinute() - premennaCas.getMinute());
       zostavajuciCas = zostavajuciCas.minusHours(premennaCas.getHour());
       zostavajuciCas = zostavajuciCas.minusMinutes(premennaCas.getMinute());
       i++;
-    }while(zostavajuciCas.getHour() != 0 && zostavajuciCas.getMinute() != 0);
+
+    }while(zostavajuciCas.getHour() > 0 || zostavajuciCas.getMinute() > 0);
     
     
   }
@@ -198,9 +204,15 @@ public class ZapisHodin{
     return formatter.format(curDate);
   }
   
-//  public void vypisHierSCasom(){
-//    
-//  }
+  public void vypisHierSCasom(){
+    LocalTime cas = LocalTime.now();
+  
+    for(int i = 0; i < hra.size(); i++){
+      cas = cas.parse(hry_a_cas[i][1]);
+      System.out.println(hry_a_cas[i][0] + " - " + cas.getHour() + "h " + cas.getMinute() + "min");
+    }
+
+  }
 
   public LocalTime premenaNaLocalTime(LocalTime cas, String hodnotaCasu){
     char[] pole1 = new char[2]; 
