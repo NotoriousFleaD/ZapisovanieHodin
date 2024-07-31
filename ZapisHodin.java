@@ -65,8 +65,12 @@ public class ZapisHodin{
       casStravenyHry.add(premenaNaLocalTime(zostavajuciCas, casHra));
       premennaCas = premennaCas.parse(String.valueOf(casStravenyHry.get(i)));
       
-      if(zostavajuciCas.getMinute() <= premennaCas.getMinute()){
-        if(zostavajuciCas.getHour() <= premennaCas.getHour()) premennaCas = premennaCas.of(zostavajuciCas.getHour(), zostavajuciCas.getMinute()); //Ak bude zadana vacsia hodnota ako zostavajuci cas, vrati hodnotu zostavajuceho casu
+      if(zostavajuciCas.getMinute() <= premennaCas.getMinute() || zostavajuciCas.getHour() <= premennaCas.getHour()){
+        if(zostavajuciCas.getHour() <= premennaCas.getHour()){
+          premennaCas = premennaCas.of(zostavajuciCas.getHour(), zostavajuciCas.getMinute()); //Ak bude zadana vacsia hodnota ako zostavajuci cas, vrati hodnotu zostavajuceho casu
+          casStravenyHry.set(i, premennaCas);
+        }
+ 
       }
       
       switch(hra.size()){
@@ -74,7 +78,7 @@ public class ZapisHodin{
           hry_a_cas = new String[1][2];
 
           hry_a_cas[0][0] = "" + hra.get(0);
-          hry_a_cas[0][1] = String.valueOf(premennaCas);
+          hry_a_cas[0][1] = String.valueOf(casStravenyHry.get(0));
           break;
           
         default:
@@ -83,7 +87,7 @@ public class ZapisHodin{
           // Inicializacia hier a casu do pola
           for(int j = 0; j < hra.size(); j++){
             hry_a_cas[j][0] = "" + hra.get(j);
-            hry_a_cas[j][1] = "" + String.valueOf(premennaCas);
+            hry_a_cas[j][1] = "" + String.valueOf(casStravenyHry.get(j));
           }
           
       }
@@ -216,14 +220,39 @@ public class ZapisHodin{
     return formatter.format(curDate);
   }
   
-  public void vypisHierSCasom(){
+  public String vypisHierSCasom(){
     LocalTime cas = LocalTime.now();
-  
-    for(int i = 0; i < hra.size(); i++){
-      cas = cas.parse(hry_a_cas[i][1]);
-      System.out.println(hry_a_cas[i][0] + " - " + cas.getHour() + "h " + cas.getMinute() + "min");
+    String hodnota = "";
+    
+    if(hra.size() > 1){
+      for(int i = 0; i < hra.size(); i++){
+        cas = cas.parse(hry_a_cas[i][1]);
+        switch(i){
+          case 0:
+            if(cas.getHour() == 0){
+              hodnota = hry_a_cas[i][0] + " - " + cas.getMinute() + "min";
+            }else if(cas.getMinute() == 0){
+              hodnota = hry_a_cas[i][0] + " - " + cas.getHour() + "h ";
+            }else  if(cas.getHour() > 0 && cas.getMinute() > 0){
+              hodnota = hry_a_cas[i][0] + " - " + cas.getHour() + "h " + cas.getMinute() + "min";
+            }
+            break;
+            
+          default:
+            if(cas.getHour() == 0){
+              hodnota = hodnota + ", " + hry_a_cas[i][0] + " - " + cas.getMinute() + "min";
+            }else if(cas.getMinute() == 0){
+              hodnota = hodnota + ", " + hry_a_cas[i][0] + " - " + cas.getHour() + "h";
+            }else if(cas.getHour() > 0 && cas.getMinute() > 0){
+              hodnota = hodnota + ", " + hry_a_cas[i][0] + " - " + cas.getHour() + "h" + cas.getMinute() + "min";
+            }
+        }
+      }
+    }else {
+      hodnota = hry_a_cas[0][0];
     }
 
+    return hodnota;
   }
 
   public LocalTime premenaNaLocalTime(LocalTime cas, String hodnotaCasu){
@@ -242,7 +271,7 @@ public class ZapisHodin{
       }
       hodiny = Integer.parseInt(String.valueOf(pole1));
       
-      i+=2; // aby sa prekocila medzera
+      i+=2; // na preskocenie medzery
     }
 
     if(hodnotaCasu.contains("min")){
@@ -268,7 +297,10 @@ public class ZapisHodin{
     return pole;
   }
 
-  
+  public String premenaNaStringTime(LocalTime cas){
+    return cas.getHour() + "h " + cas.getMinute() + "min";
+  }
+
   
   public String toString(){
     return "Datum: " + datum + "\nZaciatok prace: " + zaciatokCasu2 + "\nKoniec prace: " + koniecCasu2 + "\nHry: " + getHry() + "\nCelkovy straveny cas v praci: " + stravenyCas + " --> " + stravenyCas.getHour() + "h " + stravenyCas.getMinute() + "min" + "\nID: " + super.toString();
@@ -329,4 +361,14 @@ public class ZapisHodin{
     return String.valueOf(koniecCasu2);
   }
     
+  
+  public void setStravenyCas(LocalTime zaciatok, LocalTime koniec){
+    stravenyCas = vypocetStravenehoCasu(zaciatok, koniec);
+  }
+  
+  public LocalTime getStravenyCas(){
+    return stravenyCas;
+  }
+
+
 }
