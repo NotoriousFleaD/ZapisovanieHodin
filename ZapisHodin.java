@@ -98,8 +98,6 @@ public class ZapisHodin{
       i++;
 
     }while(zostavajuciCas.getHour() > 0 || zostavajuciCas.getMinute() > 0);
-    
-    
   }
   
   public ZapisHodin(String datum, LocalTime zaciatokCasu, LocalTime koniecCasu, ArrayList hra, ArrayList casStravenyHry){
@@ -230,21 +228,21 @@ public class ZapisHodin{
         switch(i){
           case 0:
             if(cas.getHour() == 0){
-              hodnota = hry_a_cas[i][0] + " - " + cas.getMinute() + "min";
+              hodnota = cas.getMinute() + "min " + hry_a_cas[i][0];
             }else if(cas.getMinute() == 0){
-              hodnota = hry_a_cas[i][0] + " - " + cas.getHour() + "h ";
-            }else  if(cas.getHour() > 0 && cas.getMinute() > 0){
-              hodnota = hry_a_cas[i][0] + " - " + cas.getHour() + "h " + cas.getMinute() + "min";
+              hodnota = cas.getHour() + "h " + hry_a_cas[i][0];
+            }else if(cas.getHour() > 0 && cas.getMinute() > 0){
+              hodnota = cas.getHour() + "h " + cas.getMinute() + "min " + hry_a_cas[i][0];
             }
             break;
             
-          default:
+          default:            
             if(cas.getHour() == 0){
-              hodnota = hodnota + ", " + hry_a_cas[i][0] + " - " + cas.getMinute() + "min";
+              hodnota = hodnota + ", " + cas.getMinute() + "min " + hry_a_cas[i][0];
             }else if(cas.getMinute() == 0){
-              hodnota = hodnota + ", " + hry_a_cas[i][0] + " - " + cas.getHour() + "h";
+              hodnota = hodnota + ", " + cas.getHour() + "h " + hry_a_cas[i][0];
             }else if(cas.getHour() > 0 && cas.getMinute() > 0){
-              hodnota = hodnota + ", " + hry_a_cas[i][0] + " - " + cas.getHour() + "h" + cas.getMinute() + "min";
+              hodnota = hodnota + ", " + cas.getHour() + "h " + cas.getMinute() + "min " + hry_a_cas[i][0];
             }
         }
       }
@@ -298,7 +296,17 @@ public class ZapisHodin{
   }
 
   public String premenaNaStringTime(LocalTime cas){
-    return cas.getHour() + "h " + cas.getMinute() + "min";
+    String hodnota = "";
+    
+    if(cas.getHour() == 0){
+      hodnota = cas.getMinute() + "min";
+    }else if(cas.getMinute() == 0){
+      hodnota = cas.getHour() + "h";
+    }else if(cas.getHour() > 0 && cas.getMinute() > 0){
+      hodnota = cas.getHour() + "h" + cas.getMinute() + "min";
+    }
+   
+    return hodnota;
   }
 
   

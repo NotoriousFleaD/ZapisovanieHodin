@@ -5,15 +5,13 @@ public class ZapisHodinMain{
   public static void main(String[] arg){
     ZapisHodin zapis = new ZapisHodin();
     zapis.info();
-    System.out.println(zapis.vypisHierSCasom());
     
     try {
-      FileWriter myWriter = new FileWriter("hodiny.txt");
-      myWriter.write(zapis.getDatum() + " - " + zapis.premenaNaStringTime(zapis.getStravenyCas()) + " | " + zapis.vypisHierSCasom());
+      FileWriter myWriter = new FileWriter("hodiny.txt", true);
+      myWriter.write(zapis.getDatum() + " - " + zapis.premenaNaStringTime(zapis.getStravenyCas()) + " | " + zapis.vypisHierSCasom() + "\n");
       myWriter.close();
-      System.out.println("Successfully wrote to the file.");
+      System.out.println("Uspesne zapisane do suboru.");
     } catch (IOException e) {
-      System.out.println("An error occurred.");
       e.printStackTrace();
     }
   }
