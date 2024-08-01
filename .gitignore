@@ -1,7 +1,5 @@
-ZapisHodinMain.class
-ZapisHodinMain.~ava
-ZapisHodin.class
-ZapisHodin.~ava
-info.txt
-error.txt
-hodiny.txt
+*.class
+*.~ava
+*.txt
+*.jar
+*.exe
